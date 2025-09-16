@@ -13,7 +13,7 @@ const ChatList = ({
 }) => {
   return (
     <li
-      key={idx}
+      
       className={`flex items-center gap-3 px-4 py-3 border-b border-gray-700 hover:bg-[#202c33] cursor-pointer ${
         isSelected 
           ? "bg-[#2a3942]" 

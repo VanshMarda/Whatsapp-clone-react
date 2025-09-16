@@ -2,6 +2,9 @@ import whatsappWeb from "../assets/whatsappWeb.png";
 import { Connection } from "../constant/connections";
 import MessagesArea from "./right-panel/MessageArea";
 import Composer from "./right-panel/Composer.tsx";
+import { IoSearchSharp } from "react-icons/io5";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { memo } from "react";
 
 function NoChatSelected() {
   return (
@@ -17,8 +20,15 @@ function NoChatSelected() {
   );
 }
 
-function ChatSelected({ chatSelected }: { chatSelected: Connection }) {
-
+function ChatSelected({
+  chatSelected,
+  handleNewMessage,
+  handleDeleteMessage,
+}: {
+  chatSelected: Connection;
+  handleNewMessage: (message: string) => void;
+  handleDeleteMessage: (key: number) => void;
+}) {
   return (
     <div className="flex-1 flex flex-col bg-[#0b141a]">
       <div className="flex items-center justify-between px-4 py-2 bg-[#202c33] border-l border-gray-800">
@@ -34,27 +44,45 @@ function ChatSelected({ chatSelected }: { chatSelected: Connection }) {
         </div>
 
         <div className="flex items-center gap-5 text-gray-400">
-          <button className="hover:text-white">🖥️</button>
-          <button className="hover:text-white">🔍</button>
-          <button className="hover:text-white">⋮</button>
+          <button className="hover:text-white cursor-pointer">
+            <IoSearchSharp />
+          </button>
+          <button className="hover:text-white cursor-pointer">
+            <BsThreeDotsVertical />
+          </button>
         </div>
       </div>
-      <MessagesArea messages={chatSelected.messages} />
-      <Composer />
+      <MessagesArea
+        messages={chatSelected.messages}
+        handleDeleteMessage={handleDeleteMessage}
+      />
+      <Composer handleNewMessage={handleNewMessage} />
     </div>
   );
 }
 
-const RightPanel = ({ chatSelected }: { chatSelected: Connection }) => {
+const RightPanel = ({
+  chatSelected,
+  handleNewMessage,
+  handleDeleteMessage,
+}: {
+  chatSelected: Connection;
+  handleNewMessage: (message: string) => void;
+  handleDeleteMessage: (key: number) => void;
+}) => {
   return (
     <>
       {chatSelected === null ? (
         <NoChatSelected />
       ) : (
-        <ChatSelected chatSelected={chatSelected} />
+        <ChatSelected
+          handleDeleteMessage={handleDeleteMessage}
+          chatSelected={chatSelected}
+          handleNewMessage={handleNewMessage}
+        />
       )}
     </>
   );
 };
 
-export default RightPanel;
+export default memo(RightPanel);
