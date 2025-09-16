@@ -39,14 +39,14 @@ function App() {
     setConnections((prevConnections) =>
       prevConnections.map((connection) =>
         connection.id === chatSelected.id
-          ? { ...connection, messages: [...connection.messages, message] }
+          ? { ...connection, messages: [...connection.messages, { message, time: new Date().toLocaleTimeString() }] }
           : connection
       )
     );
 
     setChatSelected((prevSelected) => ({
       ...prevSelected!,
-      messages: [...prevSelected!.messages, message],
+      messages: [...prevSelected!.messages, { message, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }],
     }));
   }
 
