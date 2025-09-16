@@ -1,13 +1,13 @@
 import { Connection } from "../constant/connections";
 import Profile from "./left-panel/Profile.tsx";
-import ChatList from "./left-panel/ChatList.tsx";
+import ChatItem from "./left-panel/ChatItem.tsx";
 
 const LeftPanel = ({
-  handleChatSelect,
+  onChatSelect,
   chatSelected,
   connections,
 }: {
-  handleChatSelect: (connection: Connection) => void;
+  onChatSelect: (connection: Connection) => void;
   chatSelected: Connection | null;
   connections: Connection[];
 }) => {
@@ -16,13 +16,12 @@ const LeftPanel = ({
     <div className="basis-1/4 h-screen border-r border-gray-700 bg-[#111b21] text-white">
       <Profile />
       <ul className="flex-1 overflow-y-auto">
-        {connections.map((connection, idx) => {
+        {connections.map((connection) => {
           return (
-            <ChatList
-              handleChatSelect={handleChatSelect}
-              key={idx}
+            <ChatItem
+              onChatSelect={onChatSelect}
+              key={connection.id}
               connection={connection}
-              idx={idx}
               isSelected={chatSelected?.id === connection.id}
             />
           );

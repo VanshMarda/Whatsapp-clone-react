@@ -3,9 +3,9 @@ import { FaPlus } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 
 const Composer = ({
-  handleNewMessage,
+  onNewMessage,
 }: {
-  handleNewMessage: (message: string) => void;
+  onNewMessage: (message: string) => void;
 }) => {
   const [message, setMessage] = useState("");
   return (
@@ -23,7 +23,7 @@ const Composer = ({
         value={message}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            handleNewMessage(message);
+            onNewMessage(message);
             setMessage("");
           }
         }}
@@ -31,7 +31,7 @@ const Composer = ({
       <button className="text-gray-400 hover:text-white cursor-pointer">
         <IoMdSend
           onClick={() => {
-            handleNewMessage(message);
+            onNewMessage(message);
             setMessage("");
           }}
         />

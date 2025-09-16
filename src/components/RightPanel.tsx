@@ -1,6 +1,6 @@
 import whatsappWeb from "../assets/whatsappWeb.png";
 import { Connection } from "../constant/connections";
-import MessagesArea from "./right-panel/MessageArea";
+import MessagesItem from "./right-panel/MessageList.tsx";
 import Composer from "./right-panel/Composer.tsx";
 import { IoSearchSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -20,14 +20,15 @@ function NoChatSelected() {
   );
 }
 
+
 function ChatSelected({
   chatSelected,
-  handleNewMessage,
-  handleDeleteMessage,
+  onNewMessage,
+  onDeleteMessage,
 }: {
   chatSelected: Connection;
-  handleNewMessage: (message: string) => void;
-  handleDeleteMessage: (key: number) => void;
+  onNewMessage: (message: string) => void;
+  onDeleteMessage: (key: number) => void;
 }) {
   return (
     <div className="flex-1 flex flex-col bg-[#0b141a]">
@@ -52,23 +53,23 @@ function ChatSelected({
           </button>
         </div>
       </div>
-      <MessagesArea
+      <MessagesItem
         messages={chatSelected.messages}
-        handleDeleteMessage={handleDeleteMessage}
+        onDeleteMessage={onDeleteMessage}
       />
-      <Composer handleNewMessage={handleNewMessage} />
+      <Composer onNewMessage={onNewMessage} />
     </div>
   );
 }
 
 const RightPanel = ({
   chatSelected,
-  handleNewMessage,
-  handleDeleteMessage,
+  onNewMessage,
+  onDeleteMessage,
 }: {
-  chatSelected: Connection;
-  handleNewMessage: (message: string) => void;
-  handleDeleteMessage: (key: number) => void;
+  chatSelected: Connection | null;
+  onNewMessage: (message: string) => void;
+  onDeleteMessage: (key: number) => void;
 }) => {
   return (
     <>
@@ -76,9 +77,9 @@ const RightPanel = ({
         <NoChatSelected />
       ) : (
         <ChatSelected
-          handleDeleteMessage={handleDeleteMessage}
+          onDeleteMessage={onDeleteMessage}
           chatSelected={chatSelected}
-          handleNewMessage={handleNewMessage}
+          onNewMessage={onNewMessage}
         />
       )}
     </>

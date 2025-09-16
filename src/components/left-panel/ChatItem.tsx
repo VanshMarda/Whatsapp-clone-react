@@ -1,25 +1,22 @@
 import { Connection } from "../../constant/connections";
 
-const ChatList = ({
+const ChatItem = ({
   connection,
-  idx,
-  handleChatSelect,
+  onChatSelect,
   isSelected,
 }: {
   connection: Connection;
-  idx: number;
-  handleChatSelect:(connection:Connection)=>void;
+  onChatSelect:(connection:Connection)=>void;
   isSelected?: boolean;
 }) => {
   return (
     <li
-      
       className={`flex items-center gap-3 px-4 py-3 border-b border-gray-700 hover:bg-[#202c33] cursor-pointer ${
         isSelected 
           ? "bg-[#2a3942]" 
           : "hover:bg-[#202c33]"
       }`}
-      onClick={()=>handleChatSelect(connection)}
+      onClick={()=>onChatSelect(connection)}
     >
       {/* Avatar */}
       <img
@@ -37,4 +34,4 @@ const ChatList = ({
   );
 };
 
-export default ChatList;
+export default ChatItem;

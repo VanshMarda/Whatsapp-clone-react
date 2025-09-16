@@ -11,21 +11,21 @@ const EncryptionNotice = () => {
   );
 };
 
-const Message = ({
+const MessageItem = ({
   index,
   message,
   time,
-  handleDeleteMessage,
+  onDeleteMessage,
 }: {
   index: number;
   message: string;
   time: string;
-  handleDeleteMessage: (key: number) => void;
+  onDeleteMessage: (key: number) => void;
 }) => {
   return (
     <div className="max-w-xs bg-[#154d37] w-full text-gray-200 px-3 py-2 flex rounded-lg items-end relative group">
       <button className="absolute top-1 right-1 text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-        <FaTimes onClick={() => handleDeleteMessage(index)} />
+        <FaTimes onClick={() => onDeleteMessage(index)} />
       </button>
       {message}
       <span className="text-xs text-gray-400 flex-1 flex justify-end">
@@ -35,12 +35,12 @@ const Message = ({
   );
 };
 
-const MessageArea = ({
+const MessageList = ({
   messages,
-  handleDeleteMessage,
+  onDeleteMessage,
 }: {
   messages: { message: string; time: string }[];
-  handleDeleteMessage: (key: number) => void;
+  onDeleteMessage: (key: number) => void;
 }) => {
   const backgroundImage =
     "https://i.pinimg.com/736x/58/c3/33/58c33377dfcbb3022493dec49d098b02.jpg";
@@ -56,12 +56,12 @@ const MessageArea = ({
           <></>
         ) : (
           messages.map((message, index) => (
-            <Message
+            <MessageItem
               index={index}
               key={index}
               message={message.message}
               time={message.time}
-              handleDeleteMessage={handleDeleteMessage}
+              onDeleteMessage={onDeleteMessage}
             />
           ))
         )}
@@ -70,4 +70,4 @@ const MessageArea = ({
   );
 };
 
-export default MessageArea;
+export default MessageList;

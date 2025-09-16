@@ -54,17 +54,17 @@ function App() {
     <div className="h-screen w-screen">
       <div className="flex flex-row">
         <LeftPanel
-          handleChatSelect={handleChatSelect}
+          onChatSelect={handleChatSelect}
           chatSelected={chatSelected}
           connections={connections}
         />
         <RightPanel
-          handleDeleteMessage={handleDeleteMessage}
-          chatSelected={chatSelected!}
-          handleNewMessage={handleNewMessage}
+          onDeleteMessage={handleDeleteMessage}
+          chatSelected={chatSelected}
+          onNewMessage={handleNewMessage}
         />
       </div>
-    </div>
+    </div>  
   );
 }
 
