@@ -1,7 +1,10 @@
 import whatsappWeb from "../assets/whatsappWeb.png";
 import { Connection } from "../constant/connections";
-import MessagesArea from "./right-panel/MessageArea";
+import MessagesItem from "./right-panel/MessageList.tsx";
 import Composer from "./right-panel/Composer.tsx";
+import { IoSearchSharp } from "react-icons/io5";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { memo } from "react";
 
 function NoChatSelected() {
   return (
@@ -17,8 +20,16 @@ function NoChatSelected() {
   );
 }
 
-function ChatSelected({ chatSelected }: { chatSelected: Connection }) {
 
+function ChatSelected({
+  chatSelected,
+  onNewMessage,
+  onDeleteMessage,
+}: {
+  chatSelected: Connection;
+  onNewMessage: (message: string) => void;
+  onDeleteMessage: (key: number) => void;
+}) {
   return (
     <div className="flex-1 flex flex-col bg-[#0b141a]">
       <div className="flex items-center justify-between px-4 py-2 bg-[#202c33] border-l border-gray-800">
@@ -34,27 +45,45 @@ function ChatSelected({ chatSelected }: { chatSelected: Connection }) {
         </div>
 
         <div className="flex items-center gap-5 text-gray-400">
-          <button className="hover:text-white">🖥️</button>
-          <button className="hover:text-white">🔍</button>
-          <button className="hover:text-white">⋮</button>
+          <button className="hover:text-white cursor-pointer">
+            <IoSearchSharp />
+          </button>
+          <button className="hover:text-white cursor-pointer">
+            <BsThreeDotsVertical />
+          </button>
         </div>
       </div>
-      <MessagesArea messages={chatSelected.messages} />
-      <Composer />
+      <MessagesItem
+        messages={chatSelected.messages}
+        onDeleteMessage={onDeleteMessage}
+      />
+      <Composer onNewMessage={onNewMessage} />
     </div>
   );
 }
 
-const RightPanel = ({ chatSelected }: { chatSelected: Connection }) => {
+const RightPanel = ({
+  chatSelected,
+  onNewMessage,
+  onDeleteMessage,
+}: {
+  chatSelected: Connection | null;
+  onNewMessage: (message: string) => void;
+  onDeleteMessage: (key: number) => void;
+}) => {
   return (
     <>
       {chatSelected === null ? (
         <NoChatSelected />
       ) : (
-        <ChatSelected chatSelected={chatSelected} />
+        <ChatSelected
+          onDeleteMessage={onDeleteMessage}
+          chatSelected={chatSelected}
+          onNewMessage={onNewMessage}
+        />
       )}
     </>
   );
 };
 
-export default RightPanel;
+export default memo(RightPanel);
