@@ -9,7 +9,7 @@ const Composer = ({
 }) => {
   const [message, setMessage] = useState("");
   return (
-    <div className="flex gap-3 p-3 bg-[#202c33]">
+    <div className="flex bottom-0 gap-3 w-full p-3 bg-[#202c33]">
       <button className="text-gray-400 hover:text-white cursor-pointer">
         <FaPlus />
       </button>

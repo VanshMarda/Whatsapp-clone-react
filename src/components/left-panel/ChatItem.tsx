@@ -1,15 +1,24 @@
+import { FaTimes } from "react-icons/fa";
 import { Connection } from "../../constant/connections";
+import { useState } from "react";
+import Modal from "../Modal";
 
 const ChatItem = ({
+  onDeleteConnection,
   connection,
   onChatSelect,
   isSelected,
+  isCompactMode,
 }: {
+  onDeleteConnection: (id: string) => void;
   connection: Connection;
   onChatSelect:(connection:Connection)=>void;
   isSelected?: boolean;
+  isCompactMode?: boolean;
 }) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   return (
+    <>
     <li
       className={`flex items-center gap-3 px-4 py-3 border-b border-gray-700 hover:bg-[#202c33] cursor-pointer ${
         isSelected 
@@ -25,12 +34,36 @@ const ChatItem = ({
         className="w-10 h-10 rounded-full"
       />
       {/* Chat info */}
-      <div className="flex-1 pb-2">
-        <div className="flex justify-between">
-          <span className="font-medium">{connection.name}</span>
+      <div className="flex-1 w-full pb-2 relative group">
+        <button className="absolute top-1 right-1 text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+          <FaTimes onClick={()=>setShowDeleteModal(true)}/>
+        </button> 
+        <div className="flex flex-col justify-between">
+          <span className="text-sm sm:text-base">{connection.name}</span>
+          
+          {!isCompactMode && (
+            <span 
+              className="text-xs text-gray-500 line-clamp-1 overflow-hidden"
+              title={connection.messages[connection.messages.length - 1]?.message || ""} 
+            >
+              {connection.messages[connection.messages.length - 1]?.message}
+            </span>
+          )}
         </div>
       </div>
     </li>
+    {showDeleteModal && (
+    <Modal
+      title="Are you sure?"
+      value={""}
+      inputType="none"
+      onChange={()=>{}}
+      onSubmit={()=>onDeleteConnection(connection.id)}
+        onCancel={()=>setShowDeleteModal(false)}
+        submitButtonText="yes"
+      />
+    )}
+    </>
   );
 };
 

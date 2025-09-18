@@ -4,7 +4,7 @@ import MessagesItem from "./right-panel/MessageList.tsx";
 import Composer from "./right-panel/Composer.tsx";
 import { IoSearchSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { memo } from "react";
+import { memo,useRef,useEffect } from "react";
 
 function NoChatSelected() {
   return (
@@ -22,14 +22,22 @@ function NoChatSelected() {
 
 
 function ChatSelected({
+  onEditMessage,
   chatSelected,
   onNewMessage,
   onDeleteMessage,
+  isCompactMode,
 }: {
+  onEditMessage: (key: number, message: string) => void;
   chatSelected: Connection;
   onNewMessage: (message: string) => void;
   onDeleteMessage: (key: number) => void;
+  isCompactMode: boolean;
 }) {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatSelected.messages]);
   return (
     <div className="flex-1 flex flex-col bg-[#0b141a]">
       <div className="flex items-center justify-between px-4 py-2 bg-[#202c33] border-l border-gray-800">
@@ -56,7 +64,10 @@ function ChatSelected({
       <MessagesItem
         messages={chatSelected.messages}
         onDeleteMessage={onDeleteMessage}
+        onEditMessage={onEditMessage}
+        isCompactMode={isCompactMode}
       />
+       <div ref={messagesEndRef} />
       <Composer onNewMessage={onNewMessage} />
     </div>
   );
@@ -66,10 +77,14 @@ const RightPanel = ({
   chatSelected,
   onNewMessage,
   onDeleteMessage,
+  onEditMessage,
+  isCompactMode,
 }: {
   chatSelected: Connection | null;
   onNewMessage: (message: string) => void;
   onDeleteMessage: (key: number) => void;
+  onEditMessage: (key: number, message: string) => void;
+  isCompactMode: boolean;
 }) => {
   return (
     <>
@@ -77,9 +92,11 @@ const RightPanel = ({
         <NoChatSelected />
       ) : (
         <ChatSelected
+          onEditMessage={onEditMessage}
           onDeleteMessage={onDeleteMessage}
           chatSelected={chatSelected}
           onNewMessage={onNewMessage}
+          isCompactMode={isCompactMode}
         />
       )}
     </>
