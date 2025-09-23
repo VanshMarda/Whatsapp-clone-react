@@ -1,6 +1,12 @@
+//libs
 import { useState } from "react";
+
+//icons
 import { FaEdit, FaLock, FaTimes } from "react-icons/fa";
+
+//components
 import Modal from "../Modal";
+
 const EncryptionNotice = () => {
   return (
     <div className="flex w-full justify-center items-center">
@@ -39,18 +45,26 @@ const MessageItem = ({
     setEditMessage(message);
   };
   return (
-    <div className="max-w-xs bg-[#154d37] w-full text-gray-200 px-3 py-2 flex rounded-lg items-end relative group">
-      <button className="absolute top-1 right-1 text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-        <FaTimes onClick={() => setShowDeleteModal(true)} />
-      </button>
-      <button className="absolute top-1 right-8 text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-        <FaEdit onClick={() => setShowEditModal(true)} />
-      </button>
-      {message}
+    <div className="max-w-xs bg-[#154d37] w-full text-gray-200 px-3  flex flex-col rounded-lg relative group">
+      <div className="break-words  whitespace-pre-wrap">
+        <div className="w-full pr-5 pt-2">
+        {message}
+        <div className="flex absolute top-1 right-1 justify-end w-full">
+          <button className="text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+            <FaEdit onClick={() => setShowEditModal(true)} />
+          </button>
+          <button className="text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+            <FaTimes onClick={() => setShowDeleteModal(true)} />
+          </button>
+        </div>
+      </div>
+      </div>
       {!isCompactMode && (
-        <span className="text-xs text-gray-400 flex-1 flex justify-end">
-          {time}
-        </span>
+        <div className="flex justify-end mt-1">
+          <span className="text-xs text-gray-400">
+            {time}
+          </span>
+        </div>
       )} 
       {showEditModal && (
         <Modal
@@ -85,7 +99,7 @@ const MessageList = ({
   isCompactMode,
 }: {
   onEditMessage: (key: number, message: string) => void;
-  messages: { message: string; time: string }[];
+  messages: { message: string; time: string;id:string }[];
   onDeleteMessage: (key: number) => void;
   isCompactMode?: boolean;
 }) => {
@@ -94,10 +108,10 @@ const MessageList = ({
 
   return (
     <div
-      className="flex-1 px-6 py-4 bg-center overflow-y-auto"
+      className="min-h-full px-6 py-4 bg-center"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <div className="flex flex-col h-full justify-end items-end gap-5">
+      <div className="flex flex-col justify-end items-end gap-5 min-h-full">
         <EncryptionNotice />
         {messages.length === 0 ? (
           <></>
@@ -105,7 +119,7 @@ const MessageList = ({
           messages.map((message, index) => (
             <MessageItem
               index={index}
-              key={index}
+              key={message.id}
               message={message.message} 
               onEditMessage={onEditMessage}
               time={message.time}

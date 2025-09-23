@@ -1,4 +1,7 @@
+//libs
 import { useState } from "react";
+
+//icons
 import { FaPlus } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 
@@ -9,7 +12,7 @@ const Composer = ({
 }) => {
   const [message, setMessage] = useState("");
   return (
-    <div className="flex bottom-0 gap-3 w-full p-3 bg-[#202c33]">
+    <div className="flex sticky z-10 bottom-0 gap-3 w-full p-3 bg-[#202c33]">
       <button className="text-gray-400 hover:text-white cursor-pointer">
         <FaPlus />
       </button>
@@ -22,7 +25,7 @@ const Composer = ({
         }}
         value={message}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && message.trim() !== "") {
             onNewMessage(message);
             setMessage("");
           }
@@ -31,8 +34,10 @@ const Composer = ({
       <button className="text-gray-400 hover:text-white cursor-pointer">
         <IoMdSend
           onClick={() => {
-            onNewMessage(message);
-            setMessage("");
+            if (message.trim() !== "") {
+              onNewMessage(message);
+              setMessage("");
+            }
           }}
         />
       </button>

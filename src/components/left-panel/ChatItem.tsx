@@ -1,7 +1,14 @@
-import { FaTimes } from "react-icons/fa";
-import { Connection } from "../../constant/connections";
+//libs
 import { useState } from "react";
+
+//types
+import { Connection } from "../../constant/connections";
+
+//components
 import Modal from "../Modal";
+
+//icons
+import { FaTimes } from "react-icons/fa";
 
 const ChatItem = ({
   onDeleteConnection,

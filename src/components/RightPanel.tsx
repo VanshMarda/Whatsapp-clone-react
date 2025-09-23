@@ -1,14 +1,23 @@
+//assets
 import whatsappWeb from "../assets/whatsappWeb.png";
+
+//types
 import { Connection } from "../constant/connections";
-import MessagesItem from "./right-panel/MessageList.tsx";
+
+//components
+import MessageList from "./right-panel/MessageList.tsx";
 import Composer from "./right-panel/Composer.tsx";
+
+//icons
 import { IoSearchSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { memo,useRef,useEffect } from "react";
+
+//libs
+import { memo, useRef, useEffect } from "react";
 
 function NoChatSelected() {
   return (
-    <div className="flex-1 bg-[#252d31] flex flex-col items-center justify-center text-center text-gray-300">
+    <div className="flex-1 h-full bg-[#252d31] flex flex-col items-center justify-center text-center text-gray-300 overflow-hidden">
       <img src={whatsappWeb} alt="WhatsApp Web" className="b-8" />
       <h1 className="text-3xl text-gray-200 mb-4">WhatsApp Web</h1>
       <p className="text-sm max-w-md text-gray-400">
@@ -19,7 +28,6 @@ function NoChatSelected() {
     </div>
   );
 }
-
 
 function ChatSelected({
   onEditMessage,
@@ -38,9 +46,10 @@ function ChatSelected({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatSelected.messages]);
+
   return (
-    <div className="flex-1 flex flex-col bg-[#0b141a]">
-      <div className="flex items-center justify-between px-4 py-2 bg-[#202c33] border-l border-gray-800">
+    <div className="flex-1 h-full flex flex-col bg-[#0b141a] overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2 bg-[#202c33] border-l border-gray-800 sticky z-10 top-0 shrink-0">
         <div className="flex items-center gap-3">
           <img
             src={chatSelected.profileImg}
@@ -61,14 +70,19 @@ function ChatSelected({
           </button>
         </div>
       </div>
-      <MessagesItem
-        messages={chatSelected.messages}
-        onDeleteMessage={onDeleteMessage}
-        onEditMessage={onEditMessage}
-        isCompactMode={isCompactMode}
-      />
-       <div ref={messagesEndRef} />
-      <Composer onNewMessage={onNewMessage} />
+      <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
+        <MessageList
+          messages={chatSelected.messages}
+          onDeleteMessage={onDeleteMessage}
+          onEditMessage={onEditMessage}
+          isCompactMode={isCompactMode}
+        />
+
+        <div ref={messagesEndRef} />
+      </div>
+      <div className="shrink-0">
+        <Composer onNewMessage={onNewMessage} />
+      </div>
     </div>
   );
 }

@@ -1,4 +1,7 @@
+//libs
 import { useState } from "react";
+
+//components
 import Modal from "../Modal";
 
 type StartNewChatProps = {
