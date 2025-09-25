@@ -6,14 +6,13 @@ export const useChat = () => {
 
   const handleChatSelected = useCallback(
     (id: string | null) => {
-      if(id === null)setChatSelected(null)
       setChatSelected(id);
     },
     [chatSelected]
   );
 
   return {
-    chatSelectedId : chatSelected,
-    handleChatSelectedId :handleChatSelected,
+    chatSelectedId: chatSelected,
+    handleChatSelectedId: handleChatSelected,
   };
 };
