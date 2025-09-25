@@ -43,6 +43,7 @@ const ChatItem = ({
       {/* Chat info */}
       <div className="flex-1 w-full pb-2 relative group">
         <button className="absolute top-1 right-1 text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+          // add onclick on button
           <FaTimes onClick={()=>setShowDeleteModal(true)}/>
         </button> 
         <div className="flex flex-col justify-between">

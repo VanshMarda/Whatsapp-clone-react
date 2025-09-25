@@ -1,5 +1,5 @@
 //libs
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
 
 //types
 import { Connection } from "../constant/connections";
@@ -7,31 +7,20 @@ import { Connection } from "../constant/connections";
 import { useLocalStorage } from "./useLocalStorage";
 
 export function useConnections() {
-  const [connections, setConnections] = useState<Connection[]>([]);
- const { getConnectionsFromStorage } = useLocalStorage();
+  const [connections, setConnections] = useLocalStorage("connections", []);
 
+  // const fetchConnections = () => {
+  //   const connectionsObj = getConnectionsFromStorage();
+  //   const connectionsArray = Object.values(connectionsObj);
+  //   setConnections(connectionsArray);
+  // };
 
-  const fetchConnections = () => {
-    const connectionsObj = getConnectionsFromStorage();
-    const connectionsArray = Object.values(connectionsObj);
-    setConnections(connectionsArray);
-  };
-
-  useEffect(() => {
-    fetchConnections();
-  }, []);
+  // useEffect(() => {
+  //   fetchConnections();
+  // }, []);
 
   const handleEditMessage = useCallback(
     (key: number, message: string, selectedChat: Connection | null) => {
-      if (selectedChat?.id === null) return;
-      const newMessage = {
-        id: `message_id_${Date.now()}`,
-        message,
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
       setConnections(
         connections.map((connection) => {
           if (connection.id === selectedChat?.id) {

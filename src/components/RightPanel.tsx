@@ -15,6 +15,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 //libs
 import { memo, useRef, useEffect } from "react";
 
+//one component per file
 function NoChatSelected() {
   return (
     <div className="flex-1 h-full bg-[#252d31] flex flex-col items-center justify-center text-center text-gray-300 overflow-hidden">

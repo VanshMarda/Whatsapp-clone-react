@@ -22,6 +22,7 @@ function App() {
     onChatSelect,
     onNewMessage,
 
+    //selectedChat
     SelectedChat,
   } = useChatApp();
 
