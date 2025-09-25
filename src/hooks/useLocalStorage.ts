@@ -1,73 +1,84 @@
-//libs
-import { useCallback } from "react";
-
-//types
-import { Connection } from "../constant/connections";
+import { Connection, Message } from "../constant/connections";
 
 export const useLocalStorage = () => {
+   const getConnectionsFromStorage = (): Record<string, Connection> => {
+    const stored = localStorage.getItem("connectionIdVsInfo");
+    return stored ? JSON.parse(stored) : {};
+  };
 
-    const handleEditMessageInLocalStorage = useCallback((key: number,message:string,id:string|undefined) => {
-        if (!id) return;
-        const chatSelected : Connection = JSON.parse(localStorage.getItem(id)!);
-            localStorage.setItem(
-              id,
-              JSON.stringify({
-                ...chatSelected,
-                messages: chatSelected.messages.map((mess, index) => {
-                  if (index === key) {
-                    return {
-                      id: `message_id_${Date.now()}`,
-                      message,
-                      time: new Date().toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }),
-                    };
-                  }
-                  return mess;
-                }),
-              })
-            );
-    }, [])
+  const setConnectionsToStorage = (
+    connectionsObj: Record<string, Connection>
+  ) => {
+    localStorage.setItem("connectionIdVsInfo", JSON.stringify(connectionsObj));
+  };
 
-    const handleDeleteMessageInLocalStorage = useCallback((key: number,id:string|undefined) => {
-        if (!id) return;
-        const chatSelected : Connection = JSON.parse(localStorage.getItem(id)!);
-        localStorage.setItem(id, JSON.stringify({
-            ...chatSelected,
-            messages: chatSelected.messages.filter((_, index) => index !== key),
-        }));
-    }, [])
+  const handleEditMessageInLocalStorage = (
+    key: number,
+    id: string | null,
+    newMessage: Message
+  ) => {
+    if (id === null) return;
+    const connectionsObj = getConnectionsFromStorage();
+    connectionsObj[id] = {
+      ...connectionsObj[id],
+      messages: connectionsObj[id].messages.map((mess, index) => {
+        if (index === key) {
+          return newMessage;
+        }
+        return mess;
+      }),
+    };
+    setConnectionsToStorage(connectionsObj);
+  };
 
-    const handleNewMessageInLocalStorage = useCallback((message:string,id:string|undefined) => {
-        if (!id) return;
-        const chatSelected : Connection = JSON.parse(localStorage.getItem(id)!);
-        localStorage.setItem(id, JSON.stringify({
-            ...chatSelected,
-            messages: [...chatSelected.messages, {
-                id: `message_id_${Date.now()}`,
-                message,
-                time: new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                }),
-            }],
-        }));
-    }, [])
+  const handleDeleteMessageInLocalStorage = (
+    key: number,
+    id: string | null,
+    chatSelected: Connection
+  ) => {
+    if (id === null) return;
+    const connectionsObj = getConnectionsFromStorage();
+    connectionsObj[id] = {
+      ...chatSelected,
+      messages: chatSelected.messages.filter((_, index) => index !== key),
+    };
+    setConnectionsToStorage(connectionsObj);
+  };
 
-    const setLocalStorage = useCallback((id:string,connection:Connection) => {
-        localStorage.setItem(id, JSON.stringify(connection));
-    }, [])
+  const handleNewMessageInLocalStorage = (
+    chatSelected: Connection,
+    newMessage: Message,
+    id: string | null
+  ) => {
+    if (id === null) return;
+    const connectionsObj = getConnectionsFromStorage();
+    connectionsObj[id] = {
+      ...chatSelected,
+      messages: [...chatSelected.messages, newMessage],
+    };
+    setConnectionsToStorage(connectionsObj);
+  };
 
-    const removeLocalStorage = useCallback((id:string) => {
-        localStorage.removeItem(id);
-    }, [])
+  const handleUpdateInLocalStorage = (
+    newConnection: Connection
+  ) => {
+    const connectionsObj = getConnectionsFromStorage();
+    connectionsObj[newConnection.id] = newConnection;
+    setConnectionsToStorage(connectionsObj);
+  };
+
+  const handleDeleteInLocalStorage = (id: string) => {
+    const connectionsObj = getConnectionsFromStorage();
+    delete connectionsObj[id];
+    setConnectionsToStorage(connectionsObj);
+  };
 
   return {
-    handleEditMessageInLocalStorage,
-    handleDeleteMessageInLocalStorage,
-    handleNewMessageInLocalStorage,
-    setLocalStorage,
-    removeLocalStorage,
-  }
+    getConnectionsFromStorage,
+    onEditMessageInLocalStorage: handleEditMessageInLocalStorage,
+    onDeleteMessageInLocalStorage: handleDeleteMessageInLocalStorage,
+    onNewMessageInLocalStorage: handleNewMessageInLocalStorage,
+    onUpdateInLocalStorage: handleUpdateInLocalStorage,
+    onDeleteInLocalStorage: handleDeleteInLocalStorage,
+  };
 };

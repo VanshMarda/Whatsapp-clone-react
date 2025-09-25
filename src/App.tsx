@@ -11,34 +11,37 @@ import { useChatApp } from "./hooks/useChatApp.ts";
 function App() {
   const {
     connections,
-    chatSelected,
+    onNewConnection,
+    onDeleteConnection,
+
     isCompactMode,
-    handleEditMessage,
-    handleDeleteMessage,
-    handleChatSelect,
-    handleNewMessage,
-    handleNewConnection,
-    handleDeleteConnection,
     toggleCompactMode,
+
+    onEditMessage,
+    onDeleteMessage,
+    onChatSelect,
+    onNewMessage,
+
+    SelectedChat,
   } = useChatApp();
 
   return (
     <div className="h-screen w-screen overflow-hidden">
       <div className="flex flex-row h-full">
         <LeftPanel
-          onChatSelect={handleChatSelect}
-          chatSelected={chatSelected}
+          onChatSelect={onChatSelect}
+          chatSelected={SelectedChat}
           connections={connections}
-          onNewConnection={handleNewConnection}
-          onDeleteConnection={handleDeleteConnection}
+          onNewConnection={onNewConnection}
+          onDeleteConnection={onDeleteConnection}
           isCompactMode={isCompactMode}
           onToggleCompactMode={toggleCompactMode}
         />
         <RightPanel
-          onEditMessage={handleEditMessage}
-          onDeleteMessage={handleDeleteMessage}
-          chatSelected={chatSelected}
-          onNewMessage={handleNewMessage}
+          onEditMessage={onEditMessage}
+          onDeleteMessage={onDeleteMessage}
+          chatSelected={SelectedChat}
+          onNewMessage={onNewMessage}
           isCompactMode={isCompactMode}
         />
       </div>

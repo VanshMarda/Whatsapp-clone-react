@@ -17,7 +17,7 @@ const LeftPanel = ({
 }: {
   onDeleteConnection: (id: string) => void;
   onChatSelect: (connection: Connection) => void;
-  chatSelected: Connection | null;
+  chatSelected: Connection | undefined;
   connections: Connection[];
   onNewConnection: (name: string, initialMessage: string) => void;
   isCompactMode: boolean;

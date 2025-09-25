@@ -4,103 +4,118 @@ import { useState, useEffect, useCallback } from "react";
 //types
 import { Connection } from "../constant/connections";
 
+import { useLocalStorage } from "./useLocalStorage";
+
 export function useConnections() {
   const [connections, setConnections] = useState<Connection[]>([]);
+ const { getConnectionsFromStorage } = useLocalStorage();
+
+
+  const fetchConnections = () => {
+    const connectionsObj = getConnectionsFromStorage();
+    const connectionsArray = Object.values(connectionsObj);
+    setConnections(connectionsArray);
+  };
 
   useEffect(() => {
-    console.log("effect rerendered again")
-    // keys are not getting fetched in the order of creation
-    const keys = Object.keys(localStorage);
-    const values = keys.map((key) => localStorage.getItem(key));
-    setConnections(values.map((value) => JSON.parse(value || "{}")));
+    fetchConnections();
   }, []);
 
-  const handleEditMessageInConnection = useCallback((
-    key: number,
-    message: string,
-    id: string | undefined 
-   ) => {
-    console.log("yooo");
-    setConnections(
-      connections.map((connection) => {
-        if (connection.id === id) {
+  const handleEditMessage = useCallback(
+    (key: number, message: string, selectedChat: Connection | null) => {
+      if (selectedChat?.id === null) return;
+      const newMessage = {
+        id: `message_id_${Date.now()}`,
+        message,
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setConnections(
+        connections.map((connection) => {
+          if (connection.id === selectedChat?.id) {
+            return {
+              ...connection,
+              messages: connection.messages.map((mess, index) => {
+                if (index === key) {
+                  return newMessage;
+                }
+                return mess;
+              }),
+            };
+          }
+          return connection;
+        })
+      );
+      return newMessage;
+    },
+    [connections]
+  );
+
+  const handleDeleteMessage = useCallback(
+    (key: number, selectedChat: Connection | null) => {
+      if (selectedChat === null) return;
+      setConnections(
+        connections.map((connection) => {
+          if (connection.id !== selectedChat.id) return connection;
           return {
             ...connection,
-            messages: connection.messages.map((mess, index) => {
-              if (index === key) {
-                return {
-                  id: `message_id_${Date.now()}`,
-                  message,
-                  time: new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                };
-              }
-              return mess;
-            }),
+            messages: connection.messages.filter((_, index) => index !== key),
           };
-        }
-        return connection;
-      })
-    );
-  },[connections])
+        })
+      );
+    },
+    [connections]
+  );
 
-  const handleDeleteMessageInConnection = useCallback((
-    key: number,
-    id: string | undefined
-  ) => {
-    setConnections(
-      connections.map((connection) => {
-        if (connection.id !== id) return connection;
-        return {
-          ...connection,
-          messages: connection.messages.filter((_, index) => index !== key),
-        };
-      })
-    );
-  },[connections])
+  const handleNewMessage = useCallback(
+    (message: string, selectedChat: Connection | null) => {
+      if (selectedChat === null) return;
+      const newMessage = {
+        id: `message_id_${Date.now()}`,
+        message,
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
 
-  const handleNewMessageInConnection =useCallback((
-    message: string,
-    id: string | undefined
-  ) => {
-    // console.log(message,id)
-    console.log(connections)
-    setConnections((prevConnections) =>
-      prevConnections.map((connection) =>
-        connection.id === id
-          ? {
-              ...connection,
-              messages: [
-                ...connection.messages,
-                {
-                  id: `message_id_${Date.now()}`,
-                  message,
-                  time: new Date().toLocaleTimeString(),
-                },
-              ],
-            }
-          : connection
-      )
-    );
-  },[connections])
+      setConnections((prevConnections) =>
+        prevConnections.map((connection) =>
+          connection.id === selectedChat.id
+            ? {
+                ...connection,
+                messages: [...connection.messages, newMessage],
+              }
+            : connection
+        )
+      );
+      return newMessage;
+    },
+    [connections]
+  );
 
-  const handleUpdateConnections= useCallback((newConnection: Connection)=> {
-    setConnections((prevConnections) => [...prevConnections, newConnection]);
-  },[connections])
+  const handleUpdate = useCallback(
+    (newConnection: Connection) => {
+      setConnections((prevConnections) => [...prevConnections, newConnection]);
+    },
+    [connections]
+  );
 
-  const handleDeleteAConnection = useCallback((id:string)=> {
-    setConnections(connections.filter((connection) => connection.id !== id));
-  },[connections])
+  const handleDelete = useCallback(
+    (id: string) => {
+      setConnections(connections.filter((connection) => connection.id !== id));
+    },
+    [connections]
+  );
 
   return {
     connections,
-    handleEditMessageInConnection,
-    handleDeleteMessageInConnection,
-    handleNewMessageInConnection,
-    handleUpdateConnections,
-    handleDeleteAConnection,
-    setConnections
+    oneEditMessage: handleEditMessage,
+    onDeleteMessage: handleDeleteMessage,
+    onNewMessage: handleNewMessage,
+    onUpdate: handleUpdate,
+    onDelete: handleDelete,
   };
 }

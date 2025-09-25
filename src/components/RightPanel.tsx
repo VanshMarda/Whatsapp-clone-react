@@ -94,7 +94,7 @@ const RightPanel = ({
   onEditMessage,
   isCompactMode,
 }: {
-  chatSelected: Connection | null;
+  chatSelected: Connection | undefined;
   onNewMessage: (message: string) => void;
   onDeleteMessage: (key: number) => void;
   onEditMessage: (key: number, message: string) => void;
@@ -102,7 +102,7 @@ const RightPanel = ({
 }) => {
   return (
     <>
-      {chatSelected === null ? (
+      {chatSelected === undefined ? (
         <NoChatSelected />
       ) : (
         <ChatSelected
