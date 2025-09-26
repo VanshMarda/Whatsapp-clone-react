@@ -1,0 +1,70 @@
+//libs
+import { useRef, useEffect } from "react";
+
+//icons
+import { IoSearchSharp } from "react-icons/io5";
+import { BsThreeDotsVertical } from "react-icons/bs";
+
+//types
+import { Connection } from "../../constant/connections";
+
+//components
+import MessageList from "./MessageList";
+import Composer from "./Composer";
+
+const ChatSelected = ({
+    onEditMessage,
+    chatSelected,
+    onNewMessage,
+    onDeleteMessage,
+  }: {
+    onEditMessage: (key: number, message: string) => void;
+    chatSelected: Connection;
+    onNewMessage: (message: string) => void;
+    onDeleteMessage: (key: number) => void;
+  }) => {
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [chatSelected.messages]);
+  
+    return (
+      <div className="flex-1 h-full flex flex-col bg-[#000000] overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#161717] border-l border-gray-800 sticky z-10 top-0 shrink-0">
+          <div className="flex items-center gap-3">
+            <img
+              src={chatSelected.profileImg}
+              alt="User"
+              className="w-10 h-10 rounded-full"
+            />
+            <div>
+              <h2 className="text-white font-medium">{chatSelected.name}</h2>
+            </div>
+          </div>
+  
+          <div className="flex items-center gap-5 text-gray-400">
+            <button className="hover:text-white cursor-pointer">
+              <IoSearchSharp />
+            </button>
+            <button className="hover:text-white cursor-pointer">
+              <BsThreeDotsVertical />
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
+          <MessageList
+            messages={chatSelected.messages}
+            onDeleteMessage={onDeleteMessage}
+            onEditMessage={onEditMessage}
+          />
+  
+          <div ref={messagesEndRef} />
+        </div>
+        <div className="shrink-0">
+          <Composer onNewMessage={onNewMessage} />
+        </div>
+      </div>
+    );
+  }
+
+  export default ChatSelected;

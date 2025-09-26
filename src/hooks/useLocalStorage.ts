@@ -1,84 +1,23 @@
-import { Connection, Message } from "../constant/connections";
+import { useEffect, useState } from "react";
 
-export const useLocalStorage = () => {
-   const getConnectionsFromStorage = (): Record<string, Connection> => {
-    const stored = localStorage.getItem("connectionIdVsInfo");
-    return stored ? JSON.parse(stored) : {};
+export const useLocalStorage = <T>(key: string, defaultValue: T) => {
+  const getConnectionsFromStorage = (key: string): T => {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : defaultValue;
   };
 
-  const setConnectionsToStorage = (
-    connectionsObj: Record<string, Connection>
-  ) => {
-    localStorage.setItem("connectionIdVsInfo", JSON.stringify(connectionsObj));
+  const setConnectionsToStorage = (key: string) => {
+    localStorage.setItem(key, JSON.stringify(state));
   };
 
-  const handleEditMessageInLocalStorage = (
-    key: number,
-    id: string | null,
-    newMessage: Message
-  ) => {
-    if (id === null) return;
-    const connectionsObj = getConnectionsFromStorage();
-    connectionsObj[id] = {
-      ...connectionsObj[id],
-      messages: connectionsObj[id].messages.map((mess, index) => {
-        if (index === key) {
-          return newMessage;
-        }
-        return mess;
-      }),
-    };
-    setConnectionsToStorage(connectionsObj);
-  };
+  const [state, setState] = useState<T>(() => {
+    return getConnectionsFromStorage(key);
+  });
 
-  const handleDeleteMessageInLocalStorage = (
-    key: number,
-    id: string | null,
-    chatSelected: Connection
-  ) => {
-    if (id === null) return;
-    const connectionsObj = getConnectionsFromStorage();
-    connectionsObj[id] = {
-      ...chatSelected,
-      messages: chatSelected.messages.filter((_, index) => index !== key),
-    };
-    setConnectionsToStorage(connectionsObj);
-  };
+  useEffect(() => {
+    console.log("Called the sync useeffect ");
+    setConnectionsToStorage(key);
+  }, [state]);
 
-  const handleNewMessageInLocalStorage = (
-    chatSelected: Connection,
-    newMessage: Message,
-    id: string | null
-  ) => {
-    if (id === null) return;
-    const connectionsObj = getConnectionsFromStorage();
-    connectionsObj[id] = {
-      ...chatSelected,
-      messages: [...chatSelected.messages, newMessage],
-    };
-    setConnectionsToStorage(connectionsObj);
-  };
-
-  const handleUpdateInLocalStorage = (
-    newConnection: Connection
-  ) => {
-    const connectionsObj = getConnectionsFromStorage();
-    connectionsObj[newConnection.id] = newConnection;
-    setConnectionsToStorage(connectionsObj);
-  };
-
-  const handleDeleteInLocalStorage = (id: string) => {
-    const connectionsObj = getConnectionsFromStorage();
-    delete connectionsObj[id];
-    setConnectionsToStorage(connectionsObj);
-  };
-
-  return {
-    getConnectionsFromStorage,
-    onEditMessageInLocalStorage: handleEditMessageInLocalStorage,
-    onDeleteMessageInLocalStorage: handleDeleteMessageInLocalStorage,
-    onNewMessageInLocalStorage: handleNewMessageInLocalStorage,
-    onUpdateInLocalStorage: handleUpdateInLocalStorage,
-    onDeleteInLocalStorage: handleDeleteInLocalStorage,
-  };
+  return [state, setState] as const;
 };

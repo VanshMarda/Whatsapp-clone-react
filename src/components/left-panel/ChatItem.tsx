@@ -1,5 +1,8 @@
 //libs
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+//context
+import { modeContext } from "../../context/mode";
 
 //types
 import { Connection } from "../../constant/connections";
@@ -15,14 +18,13 @@ const ChatItem = ({
   connection,
   onChatSelect,
   isSelected,
-  isCompactMode,
 }: {
   onDeleteConnection: (id: string) => void;
   connection: Connection;
   onChatSelect:(connection:Connection)=>void;
   isSelected?: boolean;
-  isCompactMode?: boolean;
 }) => {
+  const isCompactMode = useContext(modeContext);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   return (
     <>

@@ -6,7 +6,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 
 const Profile = ({ onToggleCompactMode }: { onToggleCompactMode: () => void }) => {
   return (
-    <div className="flex sticky top-0 z-10 items-center justify-between px-4 py-3 bg-[#202c33] border-b border-gray-700">
+    <div className="flex sticky top-0 z-10 items-center justify-between px-4 py-3 bg-[#161717] border-b border-gray-700">
     {/* Profile */}
     <img
       src="https://i.pravatar.cc/40?img=5"

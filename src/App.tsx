@@ -6,44 +6,48 @@ import RightPanel from "./components/RightPanel.tsx";
 import "./App.css";
 
 //hooks
-import { useChatApp } from "./hooks/useChatApp.ts";
+import { useChat } from "./hooks/useChat.ts";
+import { modeContext } from "./context/mode.tsx";
+import {useState } from "react";
 
 function App() {
+  const [isCompactMode, setIsCompactMode] = useState(false)
   const {
-    connections,
+    chats,
     onNewConnection,
     onDeleteConnection,
-
-    isCompactMode,
-    toggleCompactMode,
 
     onEditMessage,
     onDeleteMessage,
     onChatSelect,
     onNewMessage,
 
-    SelectedChat,
-  } = useChatApp();
+    selectedChat,
+  } = useChat();
+
+const toggleCompactMode = () => {
+  setIsCompactMode(!isCompactMode)
+}
 
   return (
     <div className="h-screen w-screen overflow-hidden">
       <div className="flex flex-row h-full">
+        <modeContext.Provider value={isCompactMode}>
         <LeftPanel
           onChatSelect={onChatSelect}
-          chatSelected={SelectedChat}
-          connections={connections}
+          chatSelected={selectedChat}
+          connections={chats}
           onNewConnection={onNewConnection}
           onDeleteConnection={onDeleteConnection}
-          isCompactMode={isCompactMode}
           onToggleCompactMode={toggleCompactMode}
         />
         <RightPanel
           onEditMessage={onEditMessage}
           onDeleteMessage={onDeleteMessage}
-          chatSelected={SelectedChat}
+          chatSelected={selectedChat}
           onNewMessage={onNewMessage}
-          isCompactMode={isCompactMode}
         />
+        </modeContext.Provider>
       </div>
     </div>
   );

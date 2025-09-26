@@ -1,5 +1,5 @@
 //types
-import { Connection } from "../constant/connections";
+import { Connection } from "../constant/connections.tsx";
 
 //components
 import Profile from "./left-panel/Profile.tsx";
@@ -12,7 +12,6 @@ const LeftPanel = ({
   chatSelected,
   connections,
   onNewConnection,
-  isCompactMode,
   onToggleCompactMode,
 }: {
   onDeleteConnection: (id: string) => void;
@@ -20,12 +19,11 @@ const LeftPanel = ({
   chatSelected: Connection | undefined;
   connections: Connection[];
   onNewConnection: (name: string, initialMessage: string) => void;
-  isCompactMode: boolean;
   onToggleCompactMode: () => void;
 }) => {
 
   return (
-    <div className="w-80 h-full flex flex-col border-r border-gray-700 bg-[#111b21] text-white overflow-hidden">    
+    <div className="w-80 h-full flex flex-col border-r border-gray-700 bg-[#161717] text-white overflow-hidden">    
       <Profile onToggleCompactMode={onToggleCompactMode} />
       <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar-dark">
         <ul className="flex flex-col">
@@ -37,7 +35,6 @@ const LeftPanel = ({
                 key={connection.id}
                 connection={connection}
                 isSelected={chatSelected?.id === connection.id}
-                isCompactMode={isCompactMode}
               />
             );
           })}

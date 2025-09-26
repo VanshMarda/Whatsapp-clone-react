@@ -5,7 +5,6 @@ export type Connection = {
   messages: Message[];
 };
 
-
 export type Message = {
   id: string;
   message: string;
