@@ -1,5 +1,5 @@
 //libs
-import { useContext, useState } from "react";
+import {  useState } from "react";
 
 //icons
 import { FaEdit, FaTimes } from "react-icons/fa";
@@ -8,7 +8,7 @@ import { FaEdit, FaTimes } from "react-icons/fa";
 import Modal from "../Modal";
 
 //context
-import { modeContext } from "../../context/mode";
+import { useModeContextProvider } from "../../context/ModeContextProvider";
 
 const MessageItem = ({
   onEditMessage,
@@ -26,7 +26,7 @@ const MessageItem = ({
   const [showEditModal, setShowEditModal] = useState(false);
   const [editMessage, setEditMessage] = useState(message);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const isCompactMode = useContext(modeContext);
+  const {isCompactMode} = useModeContextProvider(); 
   const handleEditMessageSubmit = () => {
     onEditMessage(index, editMessage);
     setShowEditModal(false);

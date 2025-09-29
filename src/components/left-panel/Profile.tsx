@@ -3,8 +3,10 @@ import { FaMoon } from "react-icons/fa";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
 import { MdOutlineMessage } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useModeContextProvider } from "../../context/ModeContextProvider";
 
-const Profile = ({ onToggleCompactMode }: { onToggleCompactMode: () => void }) => {
+const Profile = () => {
+  const {toggleCompactMode} = useModeContextProvider();
   return (
     <div className="flex sticky top-0 z-10 items-center justify-between px-4 py-3 bg-[#161717] border-b border-gray-700">
     {/* Profile */}
@@ -16,7 +18,7 @@ const Profile = ({ onToggleCompactMode }: { onToggleCompactMode: () => void }) =
 
     {/* Icons */}
     <div className="md:flex hidden cursor-pointer items-center gap-5 text-xl text-gray-300">
-      <button onClick={onToggleCompactMode} className="hover:text-white transition-colors">
+      <button onClick={toggleCompactMode} className="hover:text-white transition-colors">
         <FaMoon />
       </button>
       <MdOutlineTipsAndUpdates />

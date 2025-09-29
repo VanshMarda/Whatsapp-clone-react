@@ -5,10 +5,10 @@ import { useState } from "react";
 import Modal from "../Modal";
 
 type StartNewChatProps = {
-  onNewConnection: (name: string, initialMessage: string) => void;
+  onNewChat: (name: string, initialMessage: string) => void;
 };
 
-const StartNewChat = ({ onNewConnection }: StartNewChatProps) => {
+const StartNewChat = ({ onNewChat }: StartNewChatProps) => {
   const [showNameModal, setShowNameModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [selectedName, setSelectedName] = useState("");
@@ -25,7 +25,7 @@ const StartNewChat = ({ onNewConnection }: StartNewChatProps) => {
   };
 
   const handleMessageSubmit = () => {
-    onNewConnection(selectedName, message.trim());
+    onNewChat(selectedName, message.trim());
     setShowMessageModal(false);
     setSelectedName("");
     setMessage("");

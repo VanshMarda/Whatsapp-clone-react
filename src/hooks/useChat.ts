@@ -7,6 +7,9 @@ import { Connection } from "../constant/connections";
 //hooks
 import { useLocalStorage } from "./useLocalStorage";
 
+//utils
+import { getNewConnection, getNewMessage } from "../utils/chatUtils";
+
 export function useChat() {
   const [chats, setchats] = useLocalStorage<Connection[]>("chats", []);
   const [selectedChatId, setselectedChatId] = useState<string | null>(null);
@@ -25,14 +28,7 @@ export function useChat() {
                 ...chat,
                 messages: chat.messages.map((mess, index) =>
                   index === key
-                    ? {
-                        id: `message_id_${Date.now()}`,
-                        message,
-                        time: new Date().toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        }),
-                      }
+                    ? getNewMessage(message)
                     : mess
                 ),
               }
@@ -59,7 +55,7 @@ export function useChat() {
     [chats, selectedChat]
   );
 
-  const handleChatSelect = useCallback(
+  const handleSelectChat = useCallback(
     (chat: Connection) => {
       const currentConnection =
         chats.find((conn) => conn.id === chat.id) || chat;
@@ -78,14 +74,7 @@ export function useChat() {
                 ...chat,
                 messages: [
                   ...chat.messages,
-                  {
-                    id: `message_id_${Date.now()}`,
-                    message,
-                    time: new Date().toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    }),
-                  },
+                getNewMessage(message),
                 ],
               }
             : chat
@@ -95,36 +84,18 @@ export function useChat() {
     [chats, selectedChat]
   );
 
-  const handleNewConnection = useCallback(
+  const handleNewChat = useCallback(
     (name: string, initialMessage: string) => {
-      const newConnection: Connection = {
-        id: `user_id_${Date.now()}`,
-        name: name,
-        profileImg: `https://i.pravatar.cc/40?img=${
-          Math.floor(Math.random() * 50) + 1
-        }`,
-        messages: initialMessage
-          ? [
-              {
-                id: `message_id_${Date.now()}`,
-                message: initialMessage,
-                time: new Date().toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }),
-              },
-            ]
-          : [],
-      };
+      const newConnection = getNewConnection(name, initialMessage);
       setchats((prevchats) => [...prevchats, newConnection]);
-      handleChatSelect(newConnection);
+      handleSelectChat(newConnection);
     },
-    [chats, handleChatSelect]
+    [chats, handleSelectChat]
   );
 
-  const handleDeleteConnection = useCallback(
+  const handleDeleteChat = useCallback(
     (id: string) => {
-      setchats(chats.filter((chat) => chat.id !== id));
+      setchats((prevChats) => prevChats.filter((chat) => chat.id !== id));
     },
     [chats]
   );
@@ -132,13 +103,13 @@ export function useChat() {
   return {
     chats,
 
-    onNewConnection: handleNewConnection,
-    onDeleteConnection: handleDeleteConnection,
+    onNewChat: handleNewChat,
+    onDeleteChat: handleDeleteChat,
 
     selectedChat,
     onEditMessage: handleEditMessage,
     onDeleteMessage: handleDeleteMessage,
     onNewMessage: handleNewMessage,
-    onChatSelect: handleChatSelect,
+    onSelectChat: handleSelectChat,
   };
 }

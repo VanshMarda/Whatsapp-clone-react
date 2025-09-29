@@ -1,6 +1,7 @@
 //components
 import MessageItem from "./MessageItem";
 import EncryptionNotice from "./EncryptionNotice";
+import { useMemo, memo } from "react";
 
 const MessageList = ({
   onEditMessage,
@@ -11,8 +12,10 @@ const MessageList = ({
   messages: { message: string; time: string; id: string }[];
   onDeleteMessage: (key: number) => void;
 }) => {
-  const backgroundImage =
-    "https://i.pinimg.com/736x/58/c3/33/58c33377dfcbb3022493dec49d098b02.jpg";
+
+  const backgroundImage = useMemo(() => { 
+    return "https://i.pinimg.com/736x/58/c3/33/58c33377dfcbb3022493dec49d098b02.jpg";
+  }, []);
 
   return (
     <div
@@ -40,4 +43,4 @@ const MessageList = ({
   );
 };
 
-export default MessageList;
+export default memo(MessageList);
