@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 //types
-import { Connection } from "../../constant/connections";
+import { Action, Connection } from "../../constant/connections";
 
 //components
 import Modal from "../Modal";
@@ -10,17 +10,16 @@ import Modal from "../Modal";
 //icons
 import { FaTimes } from "react-icons/fa";
 import { useModeContextProvider } from "../../context/ModeContextProvider";
+import { ACTION_TYPES } from "../../constant/actionTypes";
 
 const ChatItem = ({
-  onDeleteChat,
   connection,
-  onSelectChat,
   isSelected,
+  onAction
 }: {
-  onDeleteChat: (id: string) => void;
   connection: Connection;
-  onSelectChat: (connection: Connection) => void;
   isSelected?: boolean;
+  onAction: (action: Action) => void;
 }) => {
   const { isCompactMode } = useModeContextProvider();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -30,7 +29,14 @@ const ChatItem = ({
         className={`flex items-center gap-3 px-4 py-3 border-b border-gray-700 hover:bg-[#202c33] cursor-pointer ${
           isSelected ? "bg-[#2a3942]" : "hover:bg-[#202c33]"
         }`}
-        onClick={() => onSelectChat(connection)}
+        onClick={()=>
+          onAction({
+            type:ACTION_TYPES.ON_SELECT_CHAT,
+            payload:{
+              id:connection.id
+            }
+          })
+        }
       >
         {/* Avatar */}
         <img
@@ -66,7 +72,13 @@ const ChatItem = ({
           value={""}
           inputType="none"
           onChange={() => {}}
-          onSubmit={() => onDeleteChat(connection.id)}
+          onSubmit={() => 
+          onAction({
+            type:ACTION_TYPES.ON_DELETE_CHAT,
+            payload:{
+              id:connection.id
+            }
+          })}
           onCancel={() => setShowDeleteModal(false)}
           submitButtonText="yes"
         />

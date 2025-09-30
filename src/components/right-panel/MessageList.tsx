@@ -2,15 +2,14 @@
 import MessageItem from "./MessageItem";
 import EncryptionNotice from "./EncryptionNotice";
 import { useMemo, memo } from "react";
+import { Action } from "../../constant/connections";
 
 const MessageList = ({
-  onEditMessage,
+  onAction,
   messages,
-  onDeleteMessage,
 }: {
-  onEditMessage: (key: number, message: string) => void;
+  onAction: (action:Action)=> void,
   messages: { message: string; time: string; id: string }[];
-  onDeleteMessage: (key: number) => void;
 }) => {
 
   const backgroundImage = useMemo(() => { 
@@ -32,9 +31,8 @@ const MessageList = ({
               index={index}
               key={message.id}
               message={message.message}
-              onEditMessage={onEditMessage}
               time={message.time}
-              onDeleteMessage={onDeleteMessage}
+              onAction={onAction}
             />
           ))
         )}

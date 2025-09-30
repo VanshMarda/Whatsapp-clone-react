@@ -6,22 +6,20 @@ import { IoSearchSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 //types
-import { Connection } from "../../constant/connections";
+import { Action, Connection } from "../../constant/connections";
 
 //components
 import MessageList from "./MessageList";
 import Composer from "./Composer";
+import { flushSync } from "react-dom";
+import { ACTION_TYPES } from "../../constant/actionTypes";
 
 const ChatSelected = ({
-  onEditMessage,
+  onAction,
   chatSelected,
-  onNewMessage,
-  onDeleteMessage,
 }: {
-  onEditMessage: (key: number, message: string) => void;
+  onAction: (action: Action) => void;
   chatSelected: Connection;
-  onNewMessage: (message: string) => void;
-  onDeleteMessage: (key: number) => void;
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -30,7 +28,14 @@ const ChatSelected = ({
   },[])
 
   const handleNewMessage = useCallback((message : string)=>{
-    onNewMessage(message);
+    flushSync(()=>{
+      onAction({
+        type:ACTION_TYPES.ON_NEW_MESSAGE,
+        payload:{
+          message:message
+        }
+      })
+    });
     scrollToEnd();
   },[]);
 
@@ -64,8 +69,7 @@ const ChatSelected = ({
       <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
         <MessageList
           messages={chatSelected.messages}
-          onDeleteMessage={onDeleteMessage}
-          onEditMessage={onEditMessage}
+          onAction={onAction}
         />
         <div ref={messagesEndRef} />
       </div>

@@ -2,17 +2,18 @@
 import { useCallback, useState, useMemo } from "react";
 
 //types
-import { Connection } from "../constant/connections";
+import { Action, Connection } from "../constant/connections";
 
 //hooks
 import { useLocalStorage } from "./useLocalStorage";
 
 //utils
 import { getNewConnection, getNewMessage } from "../utils/chatUtils";
+import { ACTION_TYPES } from "../constant/actionTypes";
 
 export function useChat() {
   const [chats, setchats] = useLocalStorage<Connection[]>("chats", []);
-  const [selectedChatId, setselectedChatId] = useState<string | null>(null);
+  const [selectedChatId, setselectedChatId] = useState<string | undefined>(undefined);
 
   const selectedChat = useMemo(
     () => chats.find((chat) => chat.id === selectedChatId),
@@ -27,9 +28,7 @@ export function useChat() {
             ? {
                 ...chat,
                 messages: chat.messages.map((mess, index) =>
-                  index === key
-                    ? getNewMessage(message)
-                    : mess
+                  index === key ? getNewMessage(message) : mess
                 ),
               }
             : chat
@@ -56,10 +55,10 @@ export function useChat() {
   );
 
   const handleSelectChat = useCallback(
-    (chat: Connection) => {
+    (chatId: string) => {
       const currentConnection =
-        chats.find((conn) => conn.id === chat.id) || chat;
-      setselectedChatId(currentConnection.id);
+        chats.find((conn) => conn.id === chatId);
+      setselectedChatId(currentConnection? currentConnection.id : undefined);
     },
     [chats, setselectedChatId]
   );
@@ -72,10 +71,7 @@ export function useChat() {
           chat.id === selectedChat.id
             ? {
                 ...chat,
-                messages: [
-                  ...chat.messages,
-                getNewMessage(message),
-                ],
+                messages: [...chat.messages, getNewMessage(message)],
               }
             : chat
         )
@@ -88,7 +84,7 @@ export function useChat() {
     (name: string, initialMessage: string) => {
       const newConnection = getNewConnection(name, initialMessage);
       setchats((prevchats) => [...prevchats, newConnection]);
-      handleSelectChat(newConnection);
+      handleSelectChat(newConnection.id);
     },
     [chats, handleSelectChat]
   );
@@ -100,16 +96,34 @@ export function useChat() {
     [chats]
   );
 
+  const handleAction = (action: Action) => {
+    switch (action.type) {
+      case ACTION_TYPES.ON_DELETE_CHAT:
+        handleDeleteChat(action.payload.id);
+        break;
+      case ACTION_TYPES.ON_EDIT_MESSAGE:
+        handleEditMessage(action.payload.key, action.payload.message);
+        break;
+      case ACTION_TYPES.ON_SELECT_CHAT:
+        handleSelectChat(action.payload.id);
+        break;
+      case ACTION_TYPES.ON_NEW_CHAT:
+        handleNewChat(action.payload.name, action.payload.message);
+        break;
+      case ACTION_TYPES.ON_NEW_MESSAGE:
+        handleNewMessage(action.payload.message);
+        break;
+      case ACTION_TYPES.ON_DELETE_MESSAGE:
+        handleDeleteMessage(action.payload.key);
+        break;
+      default:
+        break;
+    }
+  };
+
   return {
     chats,
-
-    onNewChat: handleNewChat,
-    onDeleteChat: handleDeleteChat,
-
+    onAction: handleAction,
     selectedChat,
-    onEditMessage: handleEditMessage,
-    onDeleteMessage: handleDeleteMessage,
-    onNewMessage: handleNewMessage,
-    onSelectChat: handleSelectChat,
   };
 }

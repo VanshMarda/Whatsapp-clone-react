@@ -1,5 +1,5 @@
 //types
-import { Connection } from "../constant/connections.tsx";
+import { Action, Connection } from "../constant/connections.tsx";
 
 //components
 import Profile from "./left-panel/Profile.tsx";
@@ -7,17 +7,13 @@ import ChatItem from "./left-panel/ChatItem.tsx";
 import StartNewChat from "./left-panel/StartNewChat.tsx";
 
 const LeftPanel = ({
-  onDeleteChat,
-  onSelectChat,
   chatSelected,
   connections,
-  onNewChat,
+  onAction,
 }: {
-  onDeleteChat: (id: string) => void;
-  onSelectChat: (connection: Connection) => void;
   chatSelected: Connection | undefined;
   connections: Connection[];
-  onNewChat: (name: string, initialMessage: string) => void;
+  onAction: (action: Action) => void;
 }) => {
   return (
     <div className="w-80 h-full flex flex-col border-r border-gray-700 bg-[#161717] text-white overflow-hidden">
@@ -26,9 +22,8 @@ const LeftPanel = ({
         <ul className="flex flex-col">
           {connections.map((connection) => {
             return (
-              <ChatItem
-                onDeleteChat={onDeleteChat}
-                onSelectChat={onSelectChat}
+              <ChatItem 
+                onAction={onAction}
                 key={connection.id}
                 connection={connection}
                 isSelected={chatSelected?.id === connection.id}
@@ -37,7 +32,7 @@ const LeftPanel = ({
           })}
         </ul>
       </div>
-      <StartNewChat onNewChat={onNewChat} />
+      <StartNewChat onAction={onAction}  />
     </div>
   );
 };

@@ -4,11 +4,15 @@ import { useState } from "react";
 //components
 import Modal from "../Modal";
 
+//types
+import { Action} from "../../constant/connections";
+import { ACTION_TYPES } from "../../constant/actionTypes";
+
 type StartNewChatProps = {
-  onNewChat: (name: string, initialMessage: string) => void;
+  onAction: (action: Action) => void;
 };
 
-const StartNewChat = ({ onNewChat }: StartNewChatProps) => {
+const StartNewChat = ({ onAction }: StartNewChatProps) => {
   const [showNameModal, setShowNameModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [selectedName, setSelectedName] = useState("");
@@ -25,7 +29,13 @@ const StartNewChat = ({ onNewChat }: StartNewChatProps) => {
   };
 
   const handleMessageSubmit = () => {
-    onNewChat(selectedName, message.trim());
+    onAction({
+      type:ACTION_TYPES.ON_NEW_CHAT,
+      payload: {
+        name:selectedName,
+        message:message
+      }
+    });
     setShowMessageModal(false);
     setSelectedName("");
     setMessage("");

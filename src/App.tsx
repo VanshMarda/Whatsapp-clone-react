@@ -12,34 +12,24 @@ import ModeContextProvider from "./context/ModeContextProvider.tsx";
 function App() {
   const {
     chats,
-    onNewChat,
-    onDeleteChat,
 
-    onEditMessage,
-    onDeleteMessage,
-    onSelectChat,
-    onNewMessage,
-
+    onAction,
+    
     selectedChat,
   } = useChat();
-
   return (
     <div className="h-screen w-screen overflow-hidden">
       <div className="flex flex-row h-full">
         <ModeContextProvider>
           <LeftPanel
-            onSelectChat={onSelectChat}
             chatSelected={selectedChat}
             connections={chats}
-            onNewChat={onNewChat}
-            onDeleteChat={onDeleteChat}
+            onAction={onAction}
           />
           <RightPanel
             key={selectedChat?.id}
-            onEditMessage={onEditMessage}
-            onDeleteMessage={onDeleteMessage}
+            onAction={onAction}
             chatSelected={selectedChat}
-            onNewMessage={onNewMessage}
           />
         </ModeContextProvider>
       </div>

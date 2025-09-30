@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState, memo } from "react";
 
 const ModeContext = createContext({
   isCompactMode: false,
@@ -10,12 +10,9 @@ export const useModeContextProvider = () => useContext(ModeContext);
 const ModeContextProvider = ({ children }: { children: ReactNode }) => {
   const [isCompactMode, setIsCompactMode] = useState(false);
 
-  // useCallback
   const toggleCompactMode = () => {
     setIsCompactMode(!isCompactMode);
   };
-
-  // Memoise value
 
   return (
     <ModeContext.Provider value={{ isCompactMode, toggleCompactMode }}>
@@ -24,4 +21,4 @@ const ModeContextProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default ModeContextProvider;
+export default memo(ModeContextProvider);

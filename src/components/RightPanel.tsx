@@ -1,5 +1,5 @@
 //types
-import { Connection } from "../constant/connections.ts";
+import { Action, Connection } from "../constant/connections.ts";
 
 //components
 import NoChatSelected from "./right-panel/NoChatSelected.tsx";
@@ -10,26 +10,17 @@ import { memo } from "react";
 
 const RightPanel = ({
   chatSelected,
-  onNewMessage,
-  onDeleteMessage,
-  onEditMessage,
+  onAction,
 }: {
   chatSelected: Connection | undefined;
-  onNewMessage: (message: string) => void;
-  onDeleteMessage: (key: number) => void;
-  onEditMessage: (key: number, message: string) => void;
+  onAction: (action: Action) => void;
 }) => {
   return (
     <>
       {chatSelected === undefined ? (
         <NoChatSelected />
       ) : (
-        <ChatSelected
-          onEditMessage={onEditMessage}
-          onDeleteMessage={onDeleteMessage}
-          chatSelected={chatSelected}
-          onNewMessage={onNewMessage}
-        />
+        <ChatSelected onAction={onAction} chatSelected={chatSelected} />
       )}
     </>
   );

@@ -1,5 +1,5 @@
 //libs
-import {  useState } from "react";
+import { useState } from "react";
 
 //icons
 import { FaEdit, FaTimes } from "react-icons/fa";
@@ -9,26 +9,32 @@ import Modal from "../Modal";
 
 //context
 import { useModeContextProvider } from "../../context/ModeContextProvider";
+import { Action } from "../../constant/connections";
+import { ACTION_TYPES } from "../../constant/actionTypes";
 
 const MessageItem = ({
-  onEditMessage,
   index,
   message,
   time,
-  onDeleteMessage,
+  onAction,
 }: {
-  onEditMessage: (key: number, message: string) => void;
   index: number;
   message: string;
   time: string;
-  onDeleteMessage: (key: number) => void;
+  onAction: (action: Action) => void;
 }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editMessage, setEditMessage] = useState(message);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const {isCompactMode} = useModeContextProvider(); 
+  const { isCompactMode } = useModeContextProvider();
   const handleEditMessageSubmit = () => {
-    onEditMessage(index, editMessage);
+    onAction({
+      type: ACTION_TYPES.ON_EDIT_MESSAGE,
+      payload: {
+        key: index,
+        message: editMessage,
+      },
+    });
     setShowEditModal(false);
   };
   const handleEditMessageCancel = () => {
@@ -72,7 +78,14 @@ const MessageItem = ({
           value={""}
           inputType="none"
           onChange={() => {}}
-          onSubmit={() => onDeleteMessage(index)}
+          onSubmit={() =>
+            onAction({
+              type: ACTION_TYPES.ON_DELETE_MESSAGE,
+              payload: {
+                key: index,
+              },
+            })
+          }
           onCancel={() => setShowDeleteModal(false)}
           submitButtonText="yes"
         />
