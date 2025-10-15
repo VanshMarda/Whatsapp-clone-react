@@ -1,6 +1,6 @@
 //types
-import { Action, Connection } from "../constant/connections.tsx";
-
+import { Connection } from "../constant/connections.tsx";
+import { Action } from "../types/actions.ts";
 //components
 import Profile from "./left-panel/Profile.tsx";
 import ChatItem from "./left-panel/ChatItem.tsx";

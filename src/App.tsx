@@ -38,3 +38,9 @@ function App() {
 }
 
 export default App;
+
+
+
+// types folder - create a seperate folder
+// action types - 2 files one for ACTION_TYPES constant in constants/actionTypes
+// one for Action and other types in types/actions

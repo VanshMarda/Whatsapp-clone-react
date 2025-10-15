@@ -2,7 +2,7 @@
 import MessageItem from "./MessageItem";
 import EncryptionNotice from "./EncryptionNotice";
 import { useMemo, memo } from "react";
-import { Action } from "../../constant/connections";
+import { Action } from "../../types/actions";
 
 const MessageList = ({
   onAction,

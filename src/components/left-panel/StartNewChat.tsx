@@ -5,7 +5,7 @@ import { useState } from "react";
 import Modal from "../Modal";
 
 //types
-import { Action} from "../../constant/connections";
+import { Action } from "../../types/actions";
 import { ACTION_TYPES } from "../../constant/actionTypes";
 
 type StartNewChatProps = {

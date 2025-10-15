@@ -10,8 +10,3 @@ export type Message = {
   message: string;
   time: string;
 };
-
-export type Action = {
-  type: string;
-  payload: any;
-};

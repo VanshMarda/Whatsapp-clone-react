@@ -6,7 +6,8 @@ import { IoSearchSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 //types
-import { Action, Connection } from "../../constant/connections";
+import { Connection } from "../../constant/connections";
+import { Action } from "../../types/actions";
 
 //components
 import MessageList from "./MessageList";

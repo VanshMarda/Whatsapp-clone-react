@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 type ModalProps = {
   title: string;
   label?: string;
@@ -92,4 +94,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default memo(Modal);

@@ -2,7 +2,8 @@
 import { useState } from "react";
 
 //types
-import { Action, Connection } from "../../constant/connections";
+import { Connection } from "../../constant/connections";
+import { Action } from "../../types/actions";
 
 //components
 import Modal from "../Modal";

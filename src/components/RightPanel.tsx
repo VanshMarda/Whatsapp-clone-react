@@ -1,5 +1,6 @@
 //types
-import { Action, Connection } from "../constant/connections.ts";
+import { Connection } from "../constant/connections.ts";
+import { Action } from "../types/actions.ts";
 
 //components
 import NoChatSelected from "./right-panel/NoChatSelected.tsx";

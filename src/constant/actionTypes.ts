@@ -5,4 +5,4 @@ export const ACTION_TYPES = {
     ON_NEW_CHAT : "ON_NEW_CHAT",
     ON_NEW_MESSAGE : "ON_NEW_MESSAGE",
     ON_DELETE_MESSAGE : "ON_DELETE_MESSAGE",
-}
+} as const;

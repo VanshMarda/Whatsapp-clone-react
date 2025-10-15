@@ -1,5 +1,5 @@
 //libs
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 //icons
 import { FaEdit, FaTimes } from "react-icons/fa";
@@ -9,7 +9,7 @@ import Modal from "../Modal";
 
 //context
 import { useModeContextProvider } from "../../context/ModeContextProvider";
-import { Action } from "../../constant/connections";
+import { Action } from "../../types/actions";
 import { ACTION_TYPES } from "../../constant/actionTypes";
 
 const MessageItem = ({
@@ -27,7 +27,7 @@ const MessageItem = ({
   const [editMessage, setEditMessage] = useState(message);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { isCompactMode } = useModeContextProvider();
-  const handleEditMessageSubmit = () => {
+  const handleEditMessageSubmit = useCallback(() => {
     onAction({
       type: ACTION_TYPES.ON_EDIT_MESSAGE,
       payload: {
@@ -36,11 +36,13 @@ const MessageItem = ({
       },
     });
     setShowEditModal(false);
-  };
-  const handleEditMessageCancel = () => {
+  }, [index, editMessage, onAction]);
+
+  const handleEditMessageCancel = useCallback(() => {
     setShowEditModal(false);
     setEditMessage(message);
-  };
+  }, [setShowEditModal, setEditMessage, message]);
+  
   return (
     <div className="max-w-xs bg-[#154d37] w-full text-gray-200 px-3  flex flex-col rounded-lg relative group">
       <div className="break-words  whitespace-pre-wrap">
@@ -94,4 +96,4 @@ const MessageItem = ({
   );
 };
 
-export default MessageItem;
+export default memo(MessageItem);
